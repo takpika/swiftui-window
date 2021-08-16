@@ -11,6 +11,7 @@
 		316643F1261C456D007AF71F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 316643F0261C456D007AF71F /* Preview Assets.xcassets */; };
 		316643FC261C456D007AF71F /* swiftui_windowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316643FB261C456D007AF71F /* swiftui_windowTests.swift */; };
 		31664407261C456D007AF71F /* swiftui_windowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31664406261C456D007AF71F /* swiftui_windowUITests.swift */; };
+		31CD3DB826CB19A200ED32A3 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 31CD3DB726CB19A200ED32A3 /* README.md */; };
 		31DD643E26CB11D100D3250E /* swiftui_windowFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31DD643426CB11D100D3250E /* swiftui_windowFramework.framework */; };
 		31DD644926CB11D100D3250E /* swiftui_windowFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31DD643426CB11D100D3250E /* swiftui_windowFramework.framework */; };
 		31DD644A26CB11D100D3250E /* swiftui_windowFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 31DD643426CB11D100D3250E /* swiftui_windowFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -92,6 +93,7 @@
 		31664408261C456D007AF71F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		31664414261C4607007AF71F /* window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = window.swift; sourceTree = "<group>"; };
 		31664416261C5B49007AF71F /* window_system.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = window_system.swift; sourceTree = "<group>"; };
+		31CD3DB726CB19A200ED32A3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		31DD643426CB11D100D3250E /* swiftui_windowFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = swiftui_windowFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		31DD643D26CB11D100D3250E /* swiftui-windowFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swiftui-windowFrameworkTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -140,6 +142,7 @@
 		316643DD261C456A007AF71F = {
 			isa = PBXGroup;
 			children = (
+				31CD3DB726CB19A200ED32A3 /* README.md */,
 				316643E8261C456A007AF71F /* swiftui-window */,
 				316643FA261C456D007AF71F /* swiftui-windowTests */,
 				31664405261C456D007AF71F /* swiftui-windowUITests */,
@@ -363,6 +366,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31CD3DB826CB19A200ED32A3 /* README.md in Resources */,
 				316643F1261C456D007AF71F /* Preview Assets.xcassets in Resources */,
 				316643EE261C456D007AF71F /* Assets.xcassets in Resources */,
 			);
