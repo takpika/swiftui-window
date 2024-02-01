@@ -5,6 +5,7 @@ struct window_system: View {
     @State var desktop_image = "Desktop"
     @State private var windows : Array<WindowView> = []
     @State var hover = false
+    @State var activeWindow : Int? = nil
     var body: some View {
         GeometryReader { geometry in
             ZStack{
@@ -12,22 +13,45 @@ struct window_system: View {
                     .resizable()
                     .scaledToFill()
                     .clipped()
-                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .frame(width: geometry.size.width + geometry.safeAreaInsets.leading + geometry.safeAreaInsets.trailing, height: geometry.size.height + geometry.safeAreaInsets.top + geometry.safeAreaInsets.bottom)
+                    .ignoresSafeArea()
                     .gesture(
                         TapGesture()
                             .onEnded { _ in
                                 UIApplication.shared.closeKeyboard()
+                                activeWindow = nil
                             }
                     )
-                ForEach(windows, id:\.id) { w in
-                    w
+                VStack(spacing: 0) {
+                    Spacer(minLength: geometry.safeAreaInsets.top)
+                    ZStack {
+                        ForEach(windows, id:\.id) { w in
+                            w
+                                .frame(width: geometry.size.width, height: geometry.size.height)
+                        }
+                    }
+                    Spacer(minLength: geometry.safeAreaInsets.bottom)
                 }
+                .frame(width: geometry.size.width + geometry.safeAreaInsets.leading + geometry.safeAreaInsets.trailing, height: geometry.size.height + geometry.safeAreaInsets.top + geometry.safeAreaInsets.bottom)
+                .ignoresSafeArea()
             }
         }
         .onAppear() {
-            add_window(view: AnyView(TestView()), title: "Debug Menu", size: CGSize(width: 350, height: 200), closable: false, minimizable: false ,resizable: false)
+            add_window(
+                view: AnyView(TestView()),
+                config: WindowConfig(
+                    title: "Debug Menu",
+                    size: CGSize(width: 400, height: 200),
+                    closable: false,
+                    minimizable: false,
+                    resizable: false
+                )
+            )
         }
         .statusBar(hidden: true)
+        .onHover {hover in
+            self.hover = hover
+        }
     }
     
     func close_window(id: Int){
@@ -35,21 +59,40 @@ struct window_system: View {
             if (windows[i].id == id){
                 print("Window ID \(id) closed.")
                 windows.remove(at: i)
+                checkActiveWindow()
                 return
             }
         }
     }
     
-    func add_window(view: AnyView, title: String="New Window", size: CGSize=CGSize(width: 300, height: 300), position: CGPoint=CGPoint(x: 50, y: 50), closable: Bool=true, minimizable: Bool=true, resizable: Bool=true) -> Int{
+    func add_window(view: AnyView, config: WindowConfig) -> Int{
         var max_id = 0
         for i in windows{
             if (max_id < i.id){
                 max_id = i.id
             }
         }
-        let new_window = WindowView(id: max_id+1, title: title, view: view, size: size, position: position, closable: closable, minimizable: minimizable, resizable: resizable, closeFunction: close_window, activateWindow: activate_window, addWindow: add_window)
+        let newID = max_id + 1
+        let new_window = WindowView(
+            id: newID,
+            title: config.title,
+            view: view,
+            size: config.size,
+            position: config.position,
+            closable: config.closable,
+            minimizable: config.minimizable,
+            resizable: config.resizable,
+            showLabel: config.showLabel,
+            showWindowBar: config.showWindowBar,
+            closeFunction: close_window,
+            activateWindow: activate_window,
+            addWindow: add_window,
+            activeWindowID: $activeWindow,
+            startPos: config.startPos
+        )
         windows.append(new_window)
-        return max_id+1
+        checkActiveWindow()
+        return newID
     }
     
     func activate_window(id: Int){
@@ -58,6 +101,11 @@ struct window_system: View {
                 windows.move(fromOffsets: IndexSet([i]), toOffset: windows.count)
             }
         }
+        checkActiveWindow()
+    }
+    
+    func checkActiveWindow() {
+        activeWindow = windows.last?.id
     }
 }
 

@@ -11,6 +11,11 @@
 		316643F1261C456D007AF71F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 316643F0261C456D007AF71F /* Preview Assets.xcassets */; };
 		316643FC261C456D007AF71F /* swiftui_windowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316643FB261C456D007AF71F /* swiftui_windowTests.swift */; };
 		31664407261C456D007AF71F /* swiftui_windowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31664406261C456D007AF71F /* swiftui_windowUITests.swift */; };
+		316BBDEF2B6A7F8D00340FAA /* demoApps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316BBDEE2B6A7F8D00340FAA /* demoApps.swift */; };
+		316BBDF12B6A7FD600340FAA /* calculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316BBDF02B6A7FD600340FAA /* calculator.swift */; };
+		318D31162B6A9F530015DF22 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 318D31152B6A9F530015DF22 /* Localizable.xcstrings */; };
+		318D311B2B6AA17A0015DF22 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 318D311A2B6AA17A0015DF22 /* InfoPlist.xcstrings */; };
+		318D311E2B6B4D4D0015DF22 /* map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318D311D2B6B4D4D0015DF22 /* map.swift */; };
 		31CD3DB826CB19A200ED32A3 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 31CD3DB726CB19A200ED32A3 /* README.md */; };
 		31CD3DBA26CB1C8600ED32A3 /* README_EN.md in Resources */ = {isa = PBXBuildFile; fileRef = 31CD3DB926CB1C8600ED32A3 /* README_EN.md */; };
 		31DD643E26CB11D100D3250E /* swiftui_windowFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31DD643426CB11D100D3250E /* swiftui_windowFramework.framework */; };
@@ -94,6 +99,11 @@
 		31664408261C456D007AF71F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		31664414261C4607007AF71F /* window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = window.swift; sourceTree = "<group>"; };
 		31664416261C5B49007AF71F /* window_system.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = window_system.swift; sourceTree = "<group>"; };
+		316BBDEE2B6A7F8D00340FAA /* demoApps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoApps.swift; sourceTree = "<group>"; };
+		316BBDF02B6A7FD600340FAA /* calculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calculator.swift; sourceTree = "<group>"; };
+		318D31152B6A9F530015DF22 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		318D311A2B6AA17A0015DF22 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		318D311D2B6B4D4D0015DF22 /* map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = map.swift; sourceTree = "<group>"; };
 		31CD3DB726CB19A200ED32A3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		31CD3DB926CB1C8600ED32A3 /* README_EN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README_EN.md; sourceTree = "<group>"; };
 		31DD643426CB11D100D3250E /* swiftui_windowFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = swiftui_windowFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,10 +178,11 @@
 		316643E8261C456A007AF71F /* swiftui-window */ = {
 			isa = PBXGroup;
 			children = (
+				318D31172B6AA10A0015DF22 /* locarization */,
+				316BBDED2B6A7F5E00340FAA /* apps */,
 				3107F98E261D878C00269C8A /* swiftui-window.entitlements */,
 				316643E9261C456A007AF71F /* swiftui_windowApp.swift */,
 				316643EB261C456A007AF71F /* ContentView.swift */,
-				3107F98A261D438F00269C8A /* WebView.swift */,
 				31664416261C5B49007AF71F /* window_system.swift */,
 				31664414261C4607007AF71F /* window.swift */,
 				3107F98C261D613700269C8A /* Environment.swift */,
@@ -206,6 +217,26 @@
 				31664408261C456D007AF71F /* Info.plist */,
 			);
 			path = "swiftui-windowUITests";
+			sourceTree = "<group>";
+		};
+		316BBDED2B6A7F5E00340FAA /* apps */ = {
+			isa = PBXGroup;
+			children = (
+				3107F98A261D438F00269C8A /* WebView.swift */,
+				316BBDEE2B6A7F8D00340FAA /* demoApps.swift */,
+				316BBDF02B6A7FD600340FAA /* calculator.swift */,
+				318D311D2B6B4D4D0015DF22 /* map.swift */,
+			);
+			path = apps;
+			sourceTree = "<group>";
+		};
+		318D31172B6AA10A0015DF22 /* locarization */ = {
+			isa = PBXGroup;
+			children = (
+				318D31152B6A9F530015DF22 /* Localizable.xcstrings */,
+				318D311A2B6AA17A0015DF22 /* InfoPlist.xcstrings */,
+			);
+			path = locarization;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,6 +380,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 316643DD261C456A007AF71F;
 			productRefGroup = 316643E7261C456A007AF71F /* Products */;
@@ -369,7 +401,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				318D311B2B6AA17A0015DF22 /* InfoPlist.xcstrings in Resources */,
 				31CD3DB826CB19A200ED32A3 /* README.md in Resources */,
+				318D31162B6A9F530015DF22 /* Localizable.xcstrings in Resources */,
 				316643F1261C456D007AF71F /* Preview Assets.xcassets in Resources */,
 				316643EE261C456D007AF71F /* Assets.xcassets in Resources */,
 				31CD3DBA26CB1C8600ED32A3 /* README_EN.md in Resources */,
@@ -411,10 +445,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				318D311E2B6B4D4D0015DF22 /* map.swift in Sources */,
 				31DD645826CB11EC00D3250E /* Environment.swift in Sources */,
 				31DD645C26CB11EC00D3250E /* window_system.swift in Sources */,
 				31DD645926CB11EC00D3250E /* WebView.swift in Sources */,
 				31DD645A26CB11EC00D3250E /* ContentView.swift in Sources */,
+				316BBDEF2B6A7F8D00340FAA /* demoApps.swift in Sources */,
+				316BBDF12B6A7FD600340FAA /* calculator.swift in Sources */,
 				31DD645B26CB11EC00D3250E /* window.swift in Sources */,
 				31DD645D26CB11EC00D3250E /* swiftui_windowApp.swift in Sources */,
 			);
@@ -605,10 +642,10 @@
 				CODE_SIGN_ENTITLEMENTS = "swiftui-window/swiftui-window.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"swiftui-window/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7X8BLQTS87;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "swiftui-window/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -629,10 +666,10 @@
 				CODE_SIGN_ENTITLEMENTS = "swiftui-window/swiftui-window.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"swiftui-window/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7X8BLQTS87;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "swiftui-window/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

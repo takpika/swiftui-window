@@ -19,7 +19,7 @@ struct CloseKey: EnvironmentKey {
 }
 
 struct AddWindowAllKey: EnvironmentKey {
-    static var defaultValue: ((AnyView, String, CGSize, CGPoint, Bool, Bool, Bool) -> Int)? = nil
+    static var defaultValue: ((AnyView, WindowConfig) -> Int)? = nil
 }
 
 struct AddWindowSimpleKey: EnvironmentKey {
@@ -50,12 +50,28 @@ struct PermissionGetKey: EnvironmentKey {
     static var defaultValue: ((String) -> Bool)? = nil
 }
 
-struct FullScreenGetKey: EnvironmentKey {
-    static var defaultValue: Bool = false
+struct WindowPosModeGetKey: EnvironmentKey {
+    static var defaultValue: WindowPosMode = WindowPosMode.normal
 }
 
-struct FullScreenSetKey: EnvironmentKey {
+struct WindowPosModeSetKey: EnvironmentKey {
+    static var defaultValue: ((WindowPosMode) -> Void)? = nil
+}
+
+struct ActionBarClearKey: EnvironmentKey {
     static var defaultValue: (() -> Void)? = nil
+}
+
+struct ActionBarAddKey: EnvironmentKey {
+    static var defaultValue: ((AnyView) -> String)? = nil
+}
+
+struct WindowBarHeightGetKey: EnvironmentKey {
+    static var defaultValue: CGFloat = 40
+}
+
+struct WindowBarHeightSetKey: EnvironmentKey {
+    static var defaultValue: ((CGFloat) -> Void)? = nil
 }
 
 extension EnvironmentValues {
@@ -79,7 +95,7 @@ extension EnvironmentValues {
         set { self[CloseKey.self] = newValue }
     }
     
-    var window_AllAddKey: ((AnyView, String, CGSize, CGPoint, Bool, Bool, Bool) -> Int)? {
+    var window_AllAddKey: ((AnyView, WindowConfig) -> Int)? {
         get { self[AddWindowAllKey.self] }
         set { self[AddWindowAllKey.self] = newValue }
     }
@@ -119,13 +135,33 @@ extension EnvironmentValues {
         set { self[PermissionGetKey.self] = newValue }
     }
     
-    var fullScreen_GetKey: Bool {
-        get { self[FullScreenGetKey.self] }
-        set { self[FullScreenGetKey.self] = newValue }
+    var windowPosMode_GetKey: WindowPosMode {
+        get { self[WindowPosModeGetKey.self] }
+        set { self[WindowPosModeGetKey.self] = newValue }
     }
     
-    var fullScreen_SetKey: (() -> Void)? {
-        get { self[FullScreenSetKey.self] }
-        set { self[FullScreenSetKey.self] = newValue }
+    var windowPosMode_SetKey: ((WindowPosMode) -> Void)? {
+        get { self[WindowPosModeSetKey.self] }
+        set { self[WindowPosModeSetKey.self] = newValue }
+    }
+    
+    var actionBarClearKey: (() -> Void)? {
+        get { self[ActionBarClearKey.self] }
+        set { self[ActionBarClearKey.self] = newValue }
+    }
+    
+    var actionBarAddKey: ((AnyView) -> String)? {
+        get { self[ActionBarAddKey.self] }
+        set { self[ActionBarAddKey.self] = newValue }
+    }
+    
+    var windowBarHeightGetKey: CGFloat {
+        get {self[WindowBarHeightGetKey.self]}
+        set {self[WindowBarHeightGetKey.self] = newValue}
+    }
+    
+    var windowBarHeightSetKey: ((CGFloat) -> Void)? {
+        get {self[WindowBarHeightSetKey.self]}
+        set {self[WindowBarHeightSetKey.self] = newValue}
     }
 }

@@ -1,22 +1,52 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "LocationPermission" : {
-      "extractionState" : "manual",
+    "%@番目のView" : {
+
+    },
+    "%@行目" : {
+
+    },
+    "Hello Window World!" : {
+
+    },
+    "Modal View." : {
+
+    },
+    "Mode: %@" : {
+
+    },
+    "Pos: x: %@ y: %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use your location information in the in-app browser"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アプリ内ブラウザで使用します"
+            "state" : "new",
+            "value" : "Pos: x: %1$@ y: %2$@"
           }
         }
       }
+    },
+    "Resize:" : {
+
+    },
+    "Show Modal." : {
+
+    },
+    "Size: w: %@ h: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Size: w: %1$@ h: %2$@"
+          }
+        }
+      }
+    },
+    "Test App:" : {
+
+    },
+    "Window ID: %@" : {
+
     }
   },
   "version" : "1.0"

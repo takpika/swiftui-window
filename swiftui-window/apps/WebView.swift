@@ -1,5 +1,6 @@
 import SwiftUI
 import WebKit
+import Combine
 
 public class SUIWebBrowserObject: WKWebView, WKNavigationDelegate, ObservableObject {
    private var observers: [NSKeyValueObservation?] = []
@@ -30,6 +31,9 @@ public class SUIWebBrowserObject: WKWebView, WKNavigationDelegate, ObservableObj
            configuration.allowsInlinePredictions = true
        }
        configuration.allowsInlineMediaPlayback = true
+       configuration.allowsAirPlayForMediaPlayback = true
+       configuration.allowsPictureInPictureMediaPlayback = true
+       configuration.applicationNameForUserAgent = "Version/17.2 Safari/605.1.15"
        super.init(
         frame: frame,
         configuration: configuration
@@ -109,8 +113,7 @@ struct WebBrowserReloadButton: View {
     
     func ItemImage(systemName: String) -> some View {
         Image(systemName: systemName)
-            .imageScale(.large).aspectRatio(contentMode: .fit)
-            .frame(width: 32, height: 32)
+            .imageScale(.medium).aspectRatio(contentMode: .fit)
     }
     
     var body: some View {
@@ -129,11 +132,59 @@ struct WebBrowserReloadButton: View {
     }
 }
 
+struct WebBrowserTextFieldButton: View {
+    @ObservedObject var browser: SUIWebBrowserObject
+    @Binding var urlText: String
+    @Binding var isEditing: Bool
+    
+    var body: some View {
+        if (isEditing) {
+            Button(action: {
+                urlText = ""
+            }) {
+                Image(systemName: "xmark.square.fill")
+                    .imageScale(.medium).aspectRatio(contentMode: .fit)
+            }
+            .padding(.horizontal)
+            .foregroundStyle(Color("Text"))
+        } else {
+            WebBrowserReloadButton(browser: browser)
+                .foregroundStyle(Color("Text"))
+                .padding(.horizontal)
+        }
+    }
+}
+
+struct WebBrowserLoadingProgress: View {
+    @ObservedObject var browser: SUIWebBrowserObject
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            if (browser.isLoading) {
+                ProgressView(value: browser.estimatedProgress)
+            }
+        }
+    }
+}
+
 struct WebBrowser: View {
     @ObservedObject var browser = SUIWebBrowserObject()
     @Environment(\.titleSetKey) var set_title
     @Environment(\.actionBarAddKey) var add_actionBar
     @Environment(\.actionBarClearKey) var clear_actionBar
+    @Environment(\.windowBarHeightSetKey) var changeWindowBarHeight
+    
+    @State private var urlText : String = ""
+    @State private var loadingProgress : Double = 0.0
+    @State private var isEditing : Bool = false
+    
+    static let config = WindowConfig(
+        title: "Browser Test",
+        size: CGSize(width: 800, height: 600),
+        showLabel: false,
+        startPos: WindowPosMode.center
+    )
    
    init(address: String) {
        guard let a = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
@@ -144,13 +195,49 @@ struct WebBrowser: View {
    var body: some View {
        SUIWebBrowserView(browserObject: browser)
            .onAppear() {
+               changeWindowBarHeight!(60)
                clear_actionBar!()
-               add_actionBar!(AnyView(WebBrowserBackButton(browser: browser)))
-               add_actionBar!(AnyView(WebBrowserForwardButton(browser: browser)))
-               add_actionBar!(AnyView(WebBrowserReloadButton(browser: browser)))
+               add_actionBar!(AnyView(GeometryReader{ geo in
+                   HStack {
+                      WebBrowserBackButton(browser: browser)
+                      WebBrowserForwardButton(browser: browser)
+                      Spacer(minLength: 0)
+                      ZStack {
+                          Rectangle()
+                              .fill(Color("Background"))
+                          HStack {
+                              TextField(
+                                "", text: $urlText,
+                                onEditingChanged: {edit in
+                                    isEditing = edit
+                                },
+                                onCommit: {
+                                    print(urlText)
+                                }
+                              )
+                                  .padding(.horizontal)
+                              Spacer(minLength: 0)
+                              WebBrowserTextFieldButton(browser: browser, urlText: $urlText, isEditing: $isEditing)
+                          }
+                          WebBrowserLoadingProgress(browser: browser)
+                      }
+                        .cornerRadius(5)
+                        .frame(width: geo.size.width / 2)
+                        .padding(.all, 8)
+                      Spacer(minLength: 0)
+                  }
+                   .frame(width: geo.size.width)
+               }))
+               urlText = browser.url?.absoluteString ?? ""
            }
            .onChange(of: browser.title, perform: { value in
                set_title!("Browser Test - \(browser.title ?? "")")
            })
+           .onChange(of: browser.url, perform: { value in
+               urlText = value?.absoluteString ?? ""
+           })
+           .onChange(of: browser.estimatedProgress) { value in
+               loadingProgress = value
+           }
    }
 }
