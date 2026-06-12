@@ -1,6 +1,75 @@
 
 import SwiftUI
 
+@MainActor
+public final class WindowDesktopController: ObservableObject {
+    @Published public fileprivate(set) var windowIDs: [Int] = []
+    @Published public fileprivate(set) var activeWindowID: Int?
+
+    public var isAttached: Bool {
+        addWindowHandler != nil
+    }
+
+    private var addWindowHandler: ((AnyView, WindowConfig) -> Int)?
+    private var closeWindowHandler: ((Int) -> Bool)?
+    private var activateWindowHandler: ((Int) -> Bool)?
+    private var closeAllWindowsHandler: (() -> Void)?
+
+    public nonisolated init() {}
+
+    @discardableResult
+    public func addWindow<Content: View>(
+        config: WindowConfig,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> Int? {
+        addWindow(AnyView(content()), config: config)
+    }
+
+    @discardableResult
+    public func addWindow(_ view: AnyView, config: WindowConfig) -> Int? {
+        addWindowHandler?(view, config)
+    }
+
+    @discardableResult
+    public func closeWindow(id: Int) -> Bool {
+        closeWindowHandler?(id) ?? false
+    }
+
+    @discardableResult
+    public func activateWindow(id: Int) -> Bool {
+        activateWindowHandler?(id) ?? false
+    }
+
+    public func closeAllWindows() {
+        closeAllWindowsHandler?()
+    }
+
+    fileprivate func connect(
+        addWindow: @escaping (AnyView, WindowConfig) -> Int,
+        closeWindow: @escaping (Int) -> Bool,
+        activateWindow: @escaping (Int) -> Bool,
+        closeAllWindows: @escaping () -> Void
+    ) {
+        addWindowHandler = addWindow
+        closeWindowHandler = closeWindow
+        activateWindowHandler = activateWindow
+        closeAllWindowsHandler = closeAllWindows
+    }
+
+    fileprivate func disconnect() {
+        addWindowHandler = nil
+        closeWindowHandler = nil
+        activateWindowHandler = nil
+        closeAllWindowsHandler = nil
+        update(windowIDs: [], activeWindowID: nil)
+    }
+
+    fileprivate func update(windowIDs: [Int], activeWindowID: Int?) {
+        self.windowIDs = windowIDs
+        self.activeWindowID = activeWindowID
+    }
+}
+
 public struct WindowRegistration {
     var view: () -> AnyView
     var config: WindowConfig
@@ -111,15 +180,18 @@ public struct Window<Content: View>: View, WindowRegistrationProvider {
 public struct WindowDesktop<Background: View>: View {
     private let initialWindows: [WindowRegistration]
     private let background: () -> Background
+    private let controller: WindowDesktopController?
     @State private var windows : Array<WindowView> = []
     @State private var didAddInitialWindows = false
     @State var hover = false
     @State var activeWindow : Int? = nil
 
     public init(
+        controller: WindowDesktopController? = nil,
         @WindowDesktopBuilder _ windows: () -> [WindowRegistration],
         @ViewBuilder background: @escaping () -> Background
     ) {
+        self.controller = controller
         self.initialWindows = windows()
         self.background = background
     }
@@ -152,6 +224,14 @@ public struct WindowDesktop<Background: View>: View {
             }
         }
         .onAppear() {
+            controller?.connect(
+                addWindow: add_window,
+                closeWindow: close_window,
+                activateWindow: activate_window,
+                closeAllWindows: close_all_windows
+            )
+            syncControllerState()
+
             guard !didAddInitialWindows else { return }
             didAddInitialWindows = true
             for window in initialWindows {
@@ -161,21 +241,26 @@ public struct WindowDesktop<Background: View>: View {
                 )
             }
         }
+        .onDisappear() {
+            controller?.disconnect()
+        }
         .statusBar(hidden: true)
         .onHover {hover in
             self.hover = hover
         }
     }
     
-    func close_window(id: Int){
+    @discardableResult
+    func close_window(id: Int) -> Bool {
         for i in 0..<windows.count{
             if (windows[i].id == id){
                 print("Window ID \(id) closed.")
                 windows.remove(at: i)
                 checkActiveWindow()
-                return
+                return true
             }
         }
+        return false
     }
     
     func add_window(view: AnyView, config: WindowConfig) -> Int{
@@ -197,8 +282,8 @@ public struct WindowDesktop<Background: View>: View {
             resizable: config.resizable,
             showLabel: config.showLabel,
             showWindowBar: config.showWindowBar,
-            closeFunction: close_window,
-            activateWindow: activate_window,
+            closeFunction: { id in _ = close_window(id: id) },
+            activateWindow: { id in _ = activate_window(id: id) },
             addWindow: add_window,
             activeWindowID: $activeWindow,
             startPos: config.startPos
@@ -208,23 +293,42 @@ public struct WindowDesktop<Background: View>: View {
         return newID
     }
     
-    func activate_window(id: Int){
+    @discardableResult
+    func activate_window(id: Int) -> Bool {
         for i in 0..<windows.count{
             if (windows[i].id == id){
                 windows.move(fromOffsets: IndexSet([i]), toOffset: windows.count)
+                checkActiveWindow()
+                return true
             }
         }
+        return false
+    }
+
+    func close_all_windows() {
+        windows.removeAll()
         checkActiveWindow()
     }
     
     func checkActiveWindow() {
         activeWindow = windows.last?.id
+        syncControllerState()
+    }
+
+    func syncControllerState() {
+        controller?.update(
+            windowIDs: windows.map(\.id),
+            activeWindowID: activeWindow
+        )
     }
 }
 
 public extension WindowDesktop where Background == Color {
-    init(@WindowDesktopBuilder _ windows: () -> [WindowRegistration]) {
-        self.init(windows, background: { Color.black })
+    init(
+        controller: WindowDesktopController? = nil,
+        @WindowDesktopBuilder _ windows: () -> [WindowRegistration]
+    ) {
+        self.init(controller: controller, windows, background: { Color.black })
     }
 }
 

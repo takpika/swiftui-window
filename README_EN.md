@@ -98,6 +98,37 @@ struct ToolView: View {
 }
 ```
 
+## External Control
+
+When needed, pass a `WindowDesktopController` to `WindowDesktop` to add, activate, and close windows from views outside the desktop.
+
+```swift
+struct ContentView: View {
+    @StateObject private var desktopController = WindowDesktopController()
+
+    var body: some View {
+        VStack {
+            Button("Open Notes") {
+                desktopController.addWindow(config: WindowConfig(title: "Notes", startPos: .center)) {
+                    Text("Hello Window")
+                        .padding()
+                }
+            }
+
+            WindowDesktop(controller: desktopController) {
+                Window("Inspector") {
+                    Text("Inspector")
+                }
+            } background: {
+                Color.black
+            }
+        }
+    }
+}
+```
+
+`windowIDs` and `activeWindowID` are `@Published`, so external UI can observe the current desktop state.
+
 ## Demo App
 
 The `swiftui-window.xcodeproj` demo app includes browser, calculator, map, and Metal demo windows.

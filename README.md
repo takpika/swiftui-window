@@ -98,6 +98,37 @@ struct ToolView: View {
 }
 ```
 
+## 外部から操作する
+
+必要な場合だけ `WindowDesktopController` を `WindowDesktop` に渡すと、デスクトップの外側にある View からウィンドウを追加、前面化、閉じる操作ができます。
+
+```swift
+struct ContentView: View {
+    @StateObject private var desktopController = WindowDesktopController()
+
+    var body: some View {
+        VStack {
+            Button("Open Notes") {
+                desktopController.addWindow(config: WindowConfig(title: "Notes", startPos: .center)) {
+                    Text("Hello Window")
+                        .padding()
+                }
+            }
+
+            WindowDesktop(controller: desktopController) {
+                Window("Inspector") {
+                    Text("Inspector")
+                }
+            } background: {
+                Color.black
+            }
+        }
+    }
+}
+```
+
+`windowIDs` と `activeWindowID` は `@Published` なので、外部 UI から現在の状態を監視できます。
+
 ## デモアプリ
 
 `swiftui-window.xcodeproj` にはデモアプリが含まれています。ブラウザ、電卓、Map、Metal 表示デモをウィンドウとして開けます。
