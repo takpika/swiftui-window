@@ -142,12 +142,12 @@ struct WindowChrome: View {
         GeometryReader{ geometry in
             ZStack{
                 Rectangle()
-                    .fill(Color("Background"))
+                    .fill(WindowTheme.background)
                 VStack(spacing: 0) {
                     if (showWindowBar) {
                         ZStack{
                             Rectangle()
-                                .fill(active ? Color("WindowBar") : Color("InactiveWindowBar"))
+                                .fill(active ? WindowTheme.activeBar : WindowTheme.inactiveBar)
                                 .gesture(window_drag)
                                 .onTapGesture(count: 2){
                                     activateWindow(id)
@@ -248,13 +248,13 @@ struct WindowChrome: View {
                         ZStack{
                             if active{
                                 Rectangle()
-                                    .fill(Color("WindowBar"))
+                                    .fill(WindowTheme.activeBar)
                                 if resizable{
                                     HStack{
                                         Spacer()
                                         ZStack{
                                             Rectangle()
-                                                .fill(Color("WindowBar"))
+                                                .fill(WindowTheme.activeBar)
                                                 .frame(width: 12, height: 12)
                                             Image(systemName: "line.horizontal.3")
                                                 .padding(.horizontal)
@@ -265,7 +265,7 @@ struct WindowChrome: View {
                                 }
                             }else{
                                 Rectangle()
-                                    .fill(Color("InactiveWindowBar"))
+                                    .fill(WindowTheme.inactiveBar)
                             }
                         }
                         .frame(height: 15)
@@ -500,12 +500,12 @@ struct PreviewWindowView: View {
     
     var body: some View {
         Rectangle()
-            .fill(Color("Background"))
+            .fill(WindowTheme.background)
             .opacity(showWindowPreview ? 0.3 : 0)
             .cornerRadius(10)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color("WindowBar"), lineWidth: 5)
+                    .stroke(WindowTheme.activeBar, lineWidth: 5)
                     .opacity(showWindowPreview ? 0.8 : 0)
             )
             .frame(width: previewWindowSize.width, height: previewWindowSize.height)

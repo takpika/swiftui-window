@@ -33,6 +33,9 @@ struct TestView: View{
                 Button("Calc") {
                     addWindow!(AnyView(CalculatorApp()), CalculatorApp.config)
                 }
+                Button("Metal") {
+                    _ = addWindow!(AnyView(MetalDemoApp()), MetalDemoApp.config)
+                }
                 if #available(iOS 17.0, *) {
                     Button("Map") {
                         addWindow!(AnyView(MapApp()), MapApp.config)
