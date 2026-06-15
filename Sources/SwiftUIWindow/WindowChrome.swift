@@ -11,6 +11,11 @@ struct ActionbarItem: Identifiable {
 }
 
 struct WindowChrome: View {
+    // Default heights of the chrome drawn around a window's content. WindowConfig
+    // size is the content area; the total window adds these when the bar is shown.
+    static let titleBarHeight: CGFloat = 40
+    static let bottomBarHeight: CGFloat = 15
+
     let id: Int
     @State var view: AnyView
     @Binding var title: String
@@ -38,7 +43,7 @@ struct WindowChrome: View {
     @State private var buttonSize : CGFloat = 20
     @State private var beforeSize : CGSize = CGSize()
     @State private var beforePosition : CGPoint = CGPoint()
-    @State private var topWindowBarHeight : CGFloat = 40
+    @State private var topWindowBarHeight : CGFloat = WindowChrome.titleBarHeight
     @State private var windowMoving: Bool = false
     @State private var windowMoveStartAbsPos: CGPoint = CGPoint.zero
     @State private var windowMovePos: CGPoint = CGPoint.zero
@@ -268,7 +273,7 @@ struct WindowChrome: View {
                                     .fill(WindowTheme.inactiveBar)
                             }
                         }
-                        .frame(height: 15)
+                        .frame(height: WindowChrome.bottomBarHeight)
                     }
                 }
             }

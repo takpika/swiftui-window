@@ -271,11 +271,18 @@ public struct WindowDesktop<Background: View>: View {
             }
         }
         let newID = max_id + 1
+        // WindowConfig.size is the CONTENT (client) area — matching the macOS
+        // -initWithContentRect: convention an app expects, where the requested
+        // size is the drawable region and the title bar is added on top. The
+        // window draws a title bar and a bottom status/resize bar around the
+        // content, so the internal (total) window size is the content plus that
+        // chrome when the bar is shown.
+        let chromeHeight = config.showWindowBar ? (WindowChrome.titleBarHeight + WindowChrome.bottomBarHeight) : 0
         let new_window = WindowView(
             id: newID,
             title: config.title,
             view: view,
-            size: config.size,
+            size: CGSize(width: config.size.width, height: config.size.height + chromeHeight),
             position: config.position,
             closable: config.closable,
             minimizable: config.minimizable,
