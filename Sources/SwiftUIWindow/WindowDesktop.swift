@@ -289,7 +289,13 @@ public struct WindowDesktop<Background: View>: View {
             resizable: config.resizable,
             showLabel: config.showLabel,
             showWindowBar: config.showWindowBar,
-            closeFunction: { id in _ = close_window(id: id) },
+            closeFunction: { id in
+                if let onClose = config.onClose {
+                    if onClose(id) { _ = close_window(id: id) }
+                } else {
+                    _ = close_window(id: id)
+                }
+            },
             activateWindow: { id in _ = activate_window(id: id) },
             addWindow: add_window,
             activeWindowID: $activeWindow,

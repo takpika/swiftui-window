@@ -672,6 +672,11 @@ public struct WindowConfig {
     public var showLabel : Bool
     public var showWindowBar : Bool
     public var startPos : WindowPosMode
+    // Optional app-driven close: when set, the window's close (X) button calls this
+    // with the window id instead of removing the window itself. Return true to let
+    // the window close now, false to defer (the app closes it later, e.g. after a
+    // quit-confirm). Lets a host route the X button back to the owning app.
+    public var onClose: ((Int) -> Bool)? = nil
 
     public init(
         title: String,
